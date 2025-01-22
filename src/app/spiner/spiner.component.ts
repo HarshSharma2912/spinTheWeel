@@ -514,7 +514,7 @@ export class SpinerComponent implements OnInit {
         return i;
       }
     }       
-
+//harsh
     return 0;
   }
 
