@@ -1,0 +1,88 @@
+
+
+<div class="text-center bgImageDiv " [ngStyle]="{'background-image': isSpinOn ? 'url('+backgroundImage+')' : ''}">
+	<div class="logoDiv pt-5"><img src="assets/img/heroLogo.png" width="230px"></div>
+	
+	<div class="centerDiv">
+		<div class="canvasImgDiv"><img src="assets/img/canvasImage.png"></div>
+		<div class="arrowIconDiv"><img src="assets/img/arrowIcon.png"></div>
+
+		<div id="wheelOfFortune">
+			<canvas #wheel id="wheel" width="500" height="500"></canvas>
+			<div #spin id="spin"  ><img src="./assets/img/heroFincorp.png" style="width:20px;"></div> 
+			<!-- @if(showGifDiv == true){
+				<div class="gitImgDiv animationDiv"><img src="assets/img/starGit.gif"></div>
+				@if(showContentDiv == true){
+					<div class="congratsDiv" [ngStyle]="{'background-image': targetSectorObject.reward_amount !='0' ? 'url(assets/img/Confetti.gif)' : ''}"  >
+						<div class="contentDiv">
+							@if(targetSectorObject.reward_amount != '0'){
+								<h5 class="headingText m-0">Congratulations!</h5>
+							     <p class="paraText m-0">You have won <br> <i class="fa-solid fa-indian-rupee-sign me-2"></i>{{targetSectorObject.reward_amount}}</p>
+							}@else {
+								<p class="betterLuck m-0 text-dark">Better Luck Next Time</p> 
+							}
+						</div>
+					</div>
+				}
+			} -->
+
+
+		</div>
+	</div>
+
+	@if(!isSpinOn){ 
+		<div class="spinButton">
+			<button tappable type="button" class="themebtn" (click)="spinner()">Spin Now</button> 
+		</div>
+	}
+
+ 
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="d-none">
+
+
+          <!-- wheel sound -->
+		  <audio id="myAudio" controls loop="true">
+			<!-- playbackRate="0.5" -->
+			<source src="assets/audio/spin4.mp3" type="audio/wav">
+			<source src="assets/audio/spin4.mp3" type="audio/mpeg">
+			<!-- <source src="assets/audio/one.mp3" type="audio/wav">
+			<source src="assets/audio/one.mp3" type="audio/mpeg"> -->
+
+		
+		</audio>
+
+		<!-- winningSound -->
+		<audio id="winningSound" controls loop="true">
+			<!-- playbackRate="0.5" -->
+			<source src="assets/audio/winning.mp3" type="audio/wav">
+			<source src="assets/audio/winning.mp3" type="audio/mpeg">
+
+			<!-- <source src="assets/audio/7c.mp3" type="audio/wav">
+			<source src="assets/audio/7c.mp3" type="audio/mpeg"> -->
+		</audio>
+
+		<audio id="till_till" controls loop="true">
+			<!-- playbackRate="0.5" -->
+			<source src="assets/audio/till_till.mp3" type="audio/wav">
+			<source src="assets/audio/till_till.mp3" type="audio/mpeg">
+		</audio>
+
+
+	   <!-- LoosingSound -->
+		<audio id="loosingSound" controls loop="true">
+			<!-- playbackRate="0.5" -->
+			<source src="assets/audio/loosing.mp3" type="audio/wav">
+			<source src="assets/audio/loosing.mp3" type="audio/mpeg">
+		</audio>
+</div>

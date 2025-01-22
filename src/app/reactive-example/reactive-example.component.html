@@ -1,0 +1,32 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <!-- FormArray for items -->
+    <div formArrayName="items">
+      <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+        <label for="name-{{ i }}">Name</label>
+        <input id="name-{{ i }}" formControlName="name" />
+        <div *ngIf="item.get('name')?.invalid && (item.get('name')?.dirty || item.get('name')?.touched)">
+          Name is required
+        </div>
+  
+        <label for="description-{{ i }}">Description</label>
+        <input id="description-{{ i }}" formControlName="description" />
+        <div *ngIf="item.get('description')?.invalid && (item.get('description')?.dirty || item.get('description')?.touched)">
+          Description is required
+        </div>
+      </div>
+    </div>
+  
+    <!-- FormArray for categories -->
+    <div formArrayName="categories"> 
+      <div *ngFor="let category of categories.controls; let i = index">
+        <label for="category-{{ i }}">Category {{ i + 1 }}</label>
+        <input id="category-{{ i }}" [formControlName]="i" />
+        <div *ngIf="category.invalid && (category.dirty || category.touched)">
+          Category is required
+        </div>
+      </div>
+    </div>
+  
+    <button type="submit" [disabled]="myForm.invalid">Submit</button>
+  </form>
+  

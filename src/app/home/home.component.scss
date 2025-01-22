@@ -1,0 +1,49 @@
+.error{
+    font-size: 12px;
+    color: rgb(141, 40, 40);
+}
+
+.important{
+    color: rgb(141, 40, 40);
+
+}
+
+
+
+
+.inputBox{
+  
+    input{
+        border: none;
+        border-bottom: solid 1px;
+        outline: none;
+        background-color: transparent;
+
+    }
+    input:focus {
+        outline: none;
+    }
+    .labelName{
+        position: absolute;
+        transition: 0.3s;
+        color: gray;
+        font-size: 15px;
+        z-index: -1;
+    }
+}
+.labelfloat{ 
+  transform: translate(1px, -80%);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+

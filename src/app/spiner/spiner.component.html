@@ -1,0 +1,41 @@
+<div class="container">
+
+
+@if(wantToStopSpecificPosition){
+
+    <h4>Enter Id to stop desired position</h4>
+    <mat-form-field appearance="outline">
+        <mat-label>ID </mat-label>
+        <input matInput placeholder="Enter Id" [ngModel]="targetId"  >  
+      </mat-form-field>
+
+      <button type="button" (click)="showSpin()">Submit</button>
+
+
+}@else{
+    
+    <div class="text-center bgImageDiv " [ngStyle]="{'background-image': isSpinOn ? 'url('+backgroundImage+')' : ''}">
+     
+        
+        <div class="centerDiv"> 
+            <div id="wheelOfFortune" class="position-relative">
+                <canvas #wheel id="wheel" width="500" height="500"></canvas>
+                <div #spin id="spin"  ><img src="./assets/img/heroFincorp.png" style="width:20px;"></div>  
+            </div>
+        </div>
+     
+            <div class="spinButton">
+                <button tappable type="button" class="themebtn" (click)="spinner()">Spin Now</button> 
+            </div> 
+    </div>
+
+}
+
+
+
+
+
+
+
+ 
+</div>

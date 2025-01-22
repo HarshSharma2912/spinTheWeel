@@ -1,0 +1,73 @@
+.toastrClass{
+    width: 300px;
+    max-width: 100%;
+    // background: red;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    display: none;
+    transition: all 2s; 
+    top: 20px;
+
+}
+.toastrOn{
+    display: block; 
+    animation: toastrOn forwards .3s linear; 
+}
+.toastrOff{
+    display: block; 
+    animation: toastrOff forwards .3s linear;  
+}
+@keyframes toastrOn {
+    
+    0%{
+        opacity: 0;
+        right: -300px;
+    }
+    100%{
+        opacity: 1;
+        right: 0;
+    }
+}
+
+@keyframes toastrOff {
+    
+    0%{
+        opacity: 1;
+        right: 0px;
+    }
+    100%{
+        opacity: 0;
+        right: -300px;
+        display: none;
+    }
+}
+
+.success{
+   background-color: green;
+   color: white;
+   font-weight: 500;
+
+}
+.fail{
+    background-color: red;
+    color: white;
+    font-weight: 500;
+
+
+}
+.warning{
+
+    background-color: #ffc107!important;
+    font-weight: 500;
+    color: white;
+}
+
+.cursor{
+    cursor: pointer;
+}
+.toastrBox{
+     display: flex;
+    align-items:center;
+    padding:10px;
+}
