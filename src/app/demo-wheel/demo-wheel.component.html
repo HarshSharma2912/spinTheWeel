@@ -1,0 +1,19 @@
+<div class="page-shell">
+  <div class="page-shell__bg" aria-hidden="true"></div>
+
+  <div class="page-shell__content">
+    <a routerLink="/" class="page-back-link">← Back to Home</a>
+
+    <header class="page-header">
+      <span class="page-header__eyebrow">Demo Mode</span>
+      <h1 class="page-header__title">Demo Wheel</h1>
+      <p class="page-header__description">
+        Spin with 6 predefined sectors. Enter a sector number (1–6) or sector ID to control where the wheel stops.
+      </p>
+    </header>
+
+    <div class="page-panel">
+      <app-spiner [demoMode]="true" [showControls]="true"></app-spiner>
+    </div>
+  </div>
+</div>

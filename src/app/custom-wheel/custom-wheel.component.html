@@ -1,0 +1,127 @@
+<div class="page-shell">
+  <div class="page-shell__bg" aria-hidden="true"></div>
+
+  <div class="page-shell__content page-shell__content--wide">
+    <a routerLink="/" class="page-back-link">← Back to Home</a>
+
+    <header class="page-header">
+      <span class="page-header__eyebrow">Custom Builder</span>
+      <h1 class="page-header__title">Create Custom Wheel</h1>
+      <p class="page-header__description">
+        Generate sectors with predefined names and editable IDs, then preview and spin your wheel in real time.
+      </p>
+    </header>
+
+    <div class="custom-layout">
+      <section class="page-panel custom-layout__form">
+        <form [formGroup]="myForm" class="custom-form">
+          <div formArrayName="items">
+            <div *ngFor="let item of firstInputData.controls; index as index" [formGroupName]="index" class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Wheel Name</mat-label>
+                <input matInput formControlName="nameOfSpin" placeholder="Enter wheel name" />
+                @if (item.get('nameOfSpin')?.hasError('required') && item.get('nameOfSpin')?.touched) {
+                  <mat-error>Wheel name is required</mat-error>
+                }
+                @if (item.get('nameOfSpin')?.hasError('minLength')) {
+                  <mat-error>{{ item.get('nameOfSpin')?.errors?.['minLength'] }}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Number of Sectors</mat-label>
+                <input matInput type="number" min="1" formControlName="numberOfSectors" placeholder="e.g. 8" />
+                @if (item.get('numberOfSectors')?.hasError('required') && item.get('numberOfSectors')?.touched) {
+                  <mat-error>Number of sectors is required</mat-error>
+                }
+                @if (item.get('numberOfSectors')?.hasError('min') && item.get('numberOfSectors')?.touched) {
+                  <mat-error>Enter a valid sector count greater than 0</mat-error>
+                }
+              </mat-form-field>
+
+              @if (sectorCountError) {
+                <div class="field-error">{{ sectorCountError }}</div>
+              }
+
+              @if (!sectorInputAdded) {
+                <button type="button" class="btn btn--primary" (click)="addInputs()">Generate Sectors</button>
+              }
+            </div>
+          </div>
+
+          @if (sectorInputAdded) {
+            <div class="sector-list" formArrayName="numberOfspinAdd">
+              <h3 class="sector-list__title">Sector Configuration</h3>
+
+              <div
+                class="sector-card"
+                *ngFor="let item of sectorInputData.controls; index as index"
+                [formGroupName]="index"
+              >
+                <div class="sector-card__header">
+                  <span class="sector-card__badge">#{{ index + 1 }}</span>
+                  <span class="sector-card__name">{{ item.get('name')?.value }}</span>
+                </div>
+
+                <div class="sector-card__fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Sector Name</mat-label>
+                    <input matInput formControlName="name" readonly />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Sector ID</mat-label>
+                    <input matInput formControlName="id" (input)="onSectorIdChange()" />
+                    @if (item.get('id')?.hasError('required') && item.get('id')?.touched) {
+                      <mat-error>ID is required</mat-error>
+                    }
+                    @if (item.get('id')?.hasError('duplicateId')) {
+                      <mat-error>ID must be unique</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+
+                <div class="sector-card__colors">
+                  <label class="color-picker">
+                    <span>Background</span>
+                    <input type="color" formControlName="bgColor" (input)="onSectorColorChange()" />
+                  </label>
+                  <label class="color-picker">
+                    <span>Text</span>
+                    <input type="color" formControlName="textColor" (input)="onSectorColorChange()" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          }
+        </form>
+      </section>
+
+      <section class="page-panel custom-layout__preview">
+        <div class="preview-header">
+          <h3 class="preview-header__title">Wheel Preview</h3>
+          <p class="preview-header__subtitle">
+            @if (wheelSectors.length) {
+              {{ wheelSectors.length }} sectors ready to spin
+            } @else {
+              Generate sectors to preview your wheel
+            }
+          </p>
+        </div>
+
+        @if (wheelSectors.length) {
+          <app-spiner
+            [sectorData]="wheelSectors"
+            [showControls]="true"
+            [embeddedLayout]="true"
+          ></app-spiner>
+        } @else {
+          <div class="preview-empty">
+            <div class="preview-empty__icon" aria-hidden="true">🎡</div>
+            <p>Your wheel preview will appear here after you generate sectors.</p>
+          </div>
+        }
+      </section>
+    </div>
+  </div>
+</div>

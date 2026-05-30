@@ -21,13 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
-    "@harshjangid2912/toast": "^0.0.1",
     "bootstrap": "^5.3.3",
-    "harsh-jangid-toastrr": "^0.0.1",
-    "install": "^0.13.0",
-    "my-custom-toast": "^0.0.2",
-    "myfirstlibraryharsh": "^0.0.1",
-    "npm": "^11.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

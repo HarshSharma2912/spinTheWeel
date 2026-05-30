@@ -379,11 +379,11 @@ export class NgwheelcustomComponent implements OnInit {
     // console.log("startingAng ang=>",startingAng,"startingAngRoate=>",startingAngRoate,"startingAngRoateWithminu=>",360-startingAngRoate);
     // console.log("lastAng ang=> ", lastAng,"lastAngRoate =>",lastAngRoate, "lastAngRoate =>",360-lastAngRoate); 
 
-    console.log("ang =>",this.ang);
-    console.log("ang startingAng=>",startingAng);
-    console.log("ang lastAng=>",lastAng);
-    console.log("ang angVel=>",this.angVel);
-    console.log("arcDeg =>",this.arcDeg);
+    // console.log("ang =>",this.ang);
+    // console.log("ang startingAng=>",startingAng);
+    // console.log("ang lastAng=>",lastAng);
+    // console.log("ang angVel=>",this.angVel);
+    // console.log("arcDeg =>",this.arcDeg);
 
 
 
@@ -396,7 +396,7 @@ export class NgwheelcustomComponent implements OnInit {
     
 
     if( ((this.ang)>= startingAng && (this.ang) <= lastAng ) && this.angVel < 2){
-      console.log("sector ang stop1=> ",this.angVel); 
+      // console.log("sector ang stop1=> ",this.angVel); 
       this.angVel = 0;
       var audio:any = document.getElementById("myAudio");
       audio.currentTime = 0;
@@ -459,7 +459,7 @@ export class NgwheelcustomComponent implements OnInit {
             if(index%2 == 0){
               this.highlightSector(this.spinWheelObjectArray[this.tarInx],this.tarInx,'white');
              }else{ 
-              console.log("Harsh spin->",this.spinWheelObjectArray[this.tarInx]);
+              // console.log("Harsh spin->",this.spinWheelObjectArray[this.tarInx]);
               
               
               this.highlightSector(this.spinWheelObjectArray[this.tarInx],this.tarInx,this.spinWheelObjectArray[this.tarInx].color );
@@ -575,13 +575,13 @@ export class NgwheelcustomComponent implements OnInit {
  
 
     this.ang = 0;
-    console.log("angularVelocity", this.angVel,this.arcDeg, this.rand(0.25, 0.35)); 
+    // console.log("angularVelocity", this.angVel,this.arcDeg, this.rand(0.25, 0.35)); 
     this.engine();
     const randomIndex = Math.floor(Math.random() * this.targetIndexArray.length);
     const randomElementIndex = this.targetIndexArray[randomIndex];
     this.wheelSelectedData = this.sectors[randomElementIndex].label;
     this.targetIndex = randomElementIndex; 
-    console.log("harshs wheelSelectedData",this.targetIndexArray, this.wheelSelectedData);
+    // console.log("harshs wheelSelectedData",this.targetIndexArray, this.wheelSelectedData);
     this.isThisStop = false;
     
   

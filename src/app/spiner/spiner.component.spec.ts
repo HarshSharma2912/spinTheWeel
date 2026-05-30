@@ -8,12 +8,13 @@ describe('SpinerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SpinerComponent]
-    })
-    .compileComponents();
-    
+      imports: [SpinerComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SpinerComponent);
     component = fixture.componentInstance;
+    component.demoMode = true;
+    component.showControls = true;
     fixture.detectChanges();
   });
 

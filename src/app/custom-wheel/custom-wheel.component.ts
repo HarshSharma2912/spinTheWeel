@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -13,16 +13,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
-import { createGeneratedSectors, isValidSectorCount } from '../models/wheel-sector.model';
-import { DataService } from '../Services/data.service';
+import { RouterLink } from '@angular/router';
+import { createGeneratedSectors, isValidSectorCount, WheelSectorInput } from '../models/wheel-sector.model';
 import { ToastrService } from '../Services/toastr.service';
 import { SpinerComponent } from '../spiner/spiner.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-custom-wheel',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -30,30 +28,26 @@ import { SpinerComponent } from '../spiner/spiner.component';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
+    RouterLink,
     SpinerComponent,
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './custom-wheel.component.html',
+  styleUrl: './custom-wheel.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class CustomWheelComponent {
   myForm: FormGroup;
   sectorInputAdded = false;
   sectorCountError = '';
-
-  spinNameStatus = -1;
-  sectonNumberStatus = -1;
+  wheelSectors: WheelSectorInput[] = [];
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private taostrService: ToastrService,
-    private router: Router,
-    private dataService: DataService
+    private taostrService: ToastrService
   ) {
     this.myForm = this.formBuilder.group({
       items: this.formBuilder.array([
         this.formBuilder.group({
-          nameOfSpin: ['', [Validators.required, this.nameOfSpinShouldBeString()]],
+          nameOfSpin: ['My Custom Wheel', [Validators.required, this.nameOfSpinShouldBeString()]],
           numberOfSectors: ['', [Validators.required, Validators.min(1)]],
         }),
       ]),
@@ -61,15 +55,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // console.log(this.firstInputData, 'harsh spisnis si i');
-  }
-
   addInputs(): void {
     this.sectorCountError = '';
 
     if (!this.firstInputData.valid) {
-      this.taostrService.showToast('', 'Please enter a valid spin name and sector count.', 0);
+      this.taostrService.showToast('', 'Please enter a valid wheel name and sector count.', 0);
       return;
     }
 
@@ -82,21 +72,36 @@ export class HomeComponent implements OnInit {
     }
 
     this.sectorInputData.clear();
-
     const generatedSectors = createGeneratedSectors(numberOfSectors);
 
     generatedSectors.forEach((sector) => {
-      const newItem = this.formBuilder.group({
-        name: new FormControl({ value: sector.name, disabled: true }, [Validators.required]),
-        bgColor: new FormControl(sector.bgColor, [Validators.required]),
-        textColor: new FormControl(sector.textColor, [Validators.required]),
-        id: new FormControl(sector.id, [Validators.required, this.uniqueSectorIdValidator()]),
-      });
-
-      this.sectorInputData.push(newItem);
+      this.sectorInputData.push(
+        this.formBuilder.group({
+          name: new FormControl({ value: sector.name, disabled: true }, [Validators.required]),
+          bgColor: new FormControl(sector.bgColor, [Validators.required]),
+          textColor: new FormControl(sector.textColor, [Validators.required]),
+          id: new FormControl(sector.id, [Validators.required, this.uniqueSectorIdValidator()]),
+        })
+      );
     });
 
     this.sectorInputAdded = true;
+    this.syncWheelPreview();
+  }
+
+  syncWheelPreview(): void {
+    if (!this.sectorInputAdded) {
+      this.wheelSectors = [];
+      return;
+    }
+
+    this.sectorInputData.controls.forEach((control) => {
+      control.get('id')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
+
+    this.wheelSectors = (this.sectorInputData.getRawValue() as WheelSectorInput[]).map((sector) => ({
+      ...sector,
+    }));
   }
 
   get firstInputData(): FormArray {
@@ -130,39 +135,14 @@ export class HomeComponent implements OnInit {
     };
   }
 
-  onSubmit(): void {
-    this.sectorInputData.controls.forEach((control) => {
-      control.get('id')?.updateValueAndValidity({ onlySelf: true });
-    });
-
-    if (!this.myForm.valid) {
-      this.taostrService.showToast('', 'Please fill mandatory fields and ensure sector IDs are unique.', 0);
-      return;
-    }
-
-    this.dataService.spinData = this.myForm.getRawValue();
-    this.router.navigate(['/readySpin']);
-  }
-
-  inputFocusEvent(type: number, obj: AbstractControl | null, status: number): void {
-    const value = String(obj?.value ?? '');
-    // console.log(obj?.value, 'status =>', status);
-    // console.log('type ->', type);
-
-    if (type == 0 && status == 1) {
-      this.spinNameStatus = value.trim().length == 0 ? -1 : status;
-    } else if (type == 0 && status == 2) {
-      this.sectonNumberStatus = value.trim().length == 0 ? -1 : status;
-    } else if (status == 1) {
-      this.spinNameStatus = status;
-    } else {
-      this.sectonNumberStatus = status;
-    }
-  }
-
   onSectorIdChange(): void {
     this.sectorInputData.controls.forEach((control) => {
       control.get('id')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     });
+    this.syncWheelPreview();
+  }
+
+  onSectorColorChange(): void {
+    this.syncWheelPreview();
   }
 }

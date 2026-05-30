@@ -1,41 +1,99 @@
-<div class="container">
+<div
+  class="wheel-wrapper"
+  [class.wheel-wrapper--embedded]="embeddedLayout"
+  [class.wheel-wrapper--interactive]="showControls"
+>
 
+@if (showControls) {
+  <div class="wheel-controls">
+    <mat-form-field appearance="outline" class="wheel-controls__field">
+      <mat-label>Stop on sector (number or ID)</mat-label>
+      <input
+        matInput
+        placeholder="e.g. 3 or sector ID"
+        [(ngModel)]="targetSelection"
+        (ngModelChange)="validationError = ''"
+      />
+    </mat-form-field>
 
-@if(wantToStopSpecificPosition){
+    @if (validationError) {
+      <div class="validation-error">{{ validationError }}</div>
+    }
 
-    <h4>Enter Id to stop desired position</h4>
-    <mat-form-field appearance="outline">
-        <mat-label>ID </mat-label>
-        <input matInput placeholder="Enter Id" [ngModel]="targetId"  >  
-      </mat-form-field>
-
-      <button type="button" (click)="showSpin()">Submit</button>
-
-
-}@else{
-    
-    <div class="text-center bgImageDiv " [ngStyle]="{'background-image': isSpinOn ? 'url('+backgroundImage+')' : ''}">
-     
-        
-        <div class="centerDiv"> 
-            <div id="wheelOfFortune" class="position-relative">
-                <canvas #wheel id="wheel" width="500" height="500"></canvas>
-                <div #spin id="spin"  ><img src="./assets/img/heroFincorp.png" style="width:20px;"></div>  
-            </div>
-        </div>
-     
-            <div class="spinButton">
-                <button tappable type="button" class="themebtn" (click)="spinner()">Spin Now</button> 
-            </div> 
+    <div class="wheel-actions">
+      <button
+        type="button"
+        class="btn btn--primary"
+        [disabled]="isSpinOn"
+        (click)="onSpinClick()"
+      >
+        Spin Now
+      </button>
+      <button
+        type="button"
+        class="btn btn--reset"
+        [class.btn--reset-active]="isSpinOn"
+        (click)="resetWheel()"
+      >
+        ↻ Reset Wheel
+      </button>
     </div>
+  </div>
+} @else if (wantToStopSpecificPosition) {
+  <div class="wheel-controls wheel-controls--legacy">
+    <h4 class="legacy-title">Enter sector number or ID to stop at desired position</h4>
+    <mat-form-field appearance="outline" class="wheel-controls__field">
+      <mat-label>Sector number or ID</mat-label>
+      <input
+        matInput
+        placeholder="Enter sector number or ID"
+        [(ngModel)]="targetSelection"
+        (ngModelChange)="validationError = ''"
+      />
+    </mat-form-field>
 
+    @if (validationError) {
+      <div class="validation-error">{{ validationError }}</div>
+    }
+
+    <button type="button" class="btn btn--primary" (click)="showSpin()">Continue to Wheel</button>
+  </div>
 }
 
+@if (!wantToStopSpecificPosition || showControls) {
+  <div class="wheel-stage" [class.wheel-stage--active]="isSpinOn">
+    <div class="wheel-frame">
+      <div class="wheel-pointer" aria-hidden="true"></div>
+      <div id="wheelOfFortune" class="wheel-container">
+        <canvas #wheel id="wheel" width="500" height="500"></canvas>
+        <div #spin id="spin" class="wheel-hub" aria-hidden="true">
+          <span class="wheel-hub__ring"></span>
+          <span class="wheel-hub__label">SPIN</span>
+        </div>
+      </div>
+    </div>
 
+    @if (!showControls) {
+      <div class="wheel-actions wheel-actions--legacy">
+        <button
+          type="button"
+          class="btn btn--primary"
+          [disabled]="isSpinOn"
+          (click)="spinner()"
+        >
+          Spin Now
+        </button>
+        <button
+          type="button"
+          class="btn btn--reset"
+          [class.btn--reset-active]="isSpinOn"
+          (click)="resetWheel()"
+        >
+          ↻ Reset Wheel
+        </button>
+      </div>
+    }
+  </div>
+}
 
-
-
-
-
- 
 </div>

@@ -5,8 +5,6 @@ import { HomeComponent } from './home/home.component';
 import { ReactiveExampleComponent } from './reactive-example/reactive-example.component';
 import { ToastrService } from './Services/toastr.service';
 import { CommonModule } from '@angular/common';
-import {MyCustomToastService} from 'my-custom-toast';
-import {HarshJangidToastrrService} from 'harsh-jangid-toastrr';
 import { DataService } from './Services/data.service';
 
 @Component({
@@ -20,11 +18,8 @@ export class AppComponent {
   title = 'spinWheel';
  
 
-  constructor(public toastrService:ToastrService, private mycustom:HarshJangidToastrrService, private dataService:DataService){
-    this.mycustom.showToast("hh","jjj",1);
-
-
-    console.log(" this.dataService.spinData  =>", this.dataService.spinData );
+  constructor(public toastrService:ToastrService, private dataService:DataService){
+    // console.log(" this.dataService.spinData  =>", this.dataService.spinData );
     
 
     

@@ -1,145 +1,150 @@
 <div class="container">
 
-    <!-- <button type="button" (click)="navigate()"> navigate</button> -->
-   
-<!-- 
+  <section class="demo-wheel-wrapper">
+    <app-spiner [demoMode]="true"></app-spiner>
+  </section>
 
-    <div class="d-flex">
-        <div class="inputBox position-relative mt-5">
-            <label [ngClass]="{'labelfloat' : isInputFill }" class="labelName" for="">Name</label>
-            <input type="text"  [(ngModel)]="inputValue" 
-                class="customInput">
-        </div>
-    </div> -->
+  <hr class="section-divider" />
 
+  <section class="configure-wheel-section">
+    <h2 class="section-title">Configure Your Wheel</h2>
+    <p class="section-description">
+      Enter the number of sectors, then generate them with predefined names and editable IDs.
+    </p>
 
     <div class="row">
-        <div class="col-12">
+      <div class="col-12">
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
 
+          <div class="row" formArrayName="items">
+            <div class="col-auto" *ngFor="let item of firstInputData?.controls; index as index" [formGroupName]="index">
 
-            <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+              <div class="inputBox position-relative mt-5">
+                <label for="name-{{ index }}">
+                  <span [ngClass]="{'labelfloat' : spinNameStatus == 1 }" class="labelName">
+                    Name<span class="important">*</span>
+                  </span>
+                  <input
+                    id="name-{{ index }}"
+                    type="text"
+                    formControlName="nameOfSpin"
+                    (focusout)="inputFocusEvent(0, item.get('nameOfSpin'), 1)"
+                    (focus)="inputFocusEvent(1, item.get('nameOfSpin'), 1)"
+                  />
 
-                <div class="row" formArrayName="items">
-                    <div class="col-auto" *ngFor="let item of firstInputData?.controls; index as index"
-                        [formGroupName]="index">
+                  @if (item.get('nameOfSpin')?.errors) {
+                    @if (
+                      item.get('nameOfSpin')?.invalid &&
+                      item.get('nameOfSpin')?.hasError('required') &&
+                      (item.get('nameOfSpin')?.dirty || item.get('nameOfSpin')?.touched)
+                    ) {
+                      <div class="error">name is required</div>
+                    } @else if (
+                      item.get('nameOfSpin')?.hasError('minLength') &&
+                      !item.get('nameOfSpin')?.hasError('required')
+                    ) {
+                      <div class="error">{{ item.get('nameOfSpin')?.errors?.['minLength'] }}</div>
+                    }
+                  }
+                </label>
+              </div>
 
+              <div class="inputBox position-relative mt-5">
+                <label for="sectors-{{ index }}">
+                  <span [ngClass]="{'labelfloat' : sectonNumberStatus == 2 }" class="labelName">
+                    Number of Sectors<span class="important">*</span>
+                  </span>
+                  <input
+                    id="sectors-{{ index }}"
+                    type="number"
+                    min="1"
+                    formControlName="numberOfSectors"
+                    (focusout)="inputFocusEvent(0, item.get('numberOfSectors'), 2)"
+                    (focus)="inputFocusEvent(1, item.get('numberOfSectors'), 2)"
+                  />
 
+                  @if (
+                    item.get('numberOfSectors')?.invalid &&
+                    item.get('numberOfSectors')?.hasError('required') &&
+                    (item.get('numberOfSectors')?.dirty || item.get('numberOfSectors')?.touched)
+                  ) {
+                    <div class="error">Number of sectors is required</div>
+                  }
+                  @if (
+                    item.get('numberOfSectors')?.invalid &&
+                    !item.get('numberOfSectors')?.hasError('required') &&
+                    (item.get('numberOfSectors')?.dirty || item.get('numberOfSectors')?.touched)
+                  ) {
+                    <div class="error">Enter a valid sector count greater than 0</div>
+                  }
+                  @if (sectorCountError) {
+                    <div class="error">{{ sectorCountError }}</div>
+                  }
+                </label>
+              </div>
+            </div>
+          </div>
 
-                        <div class="inputBox position-relative mt-5">
+          <div class="mt-4 row mx-0" formArrayName="numberOfspinAdd">
+            <div
+              class="col-lg-6 gy-3 col-12"
+              *ngFor="let item of sectorInputData.controls; index as index"
+              [formGroupName]="index"
+            >
+              <div class="customCard row mx-0 justify-content-center align-items-center">
+                <div class="col-md-12 d-flex col-12 flex-wrap">
+                  <p class="mb-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Name</mat-label>
+                      <input matInput formControlName="name" readonly />
+                    </mat-form-field>
+                  </p>
 
-                            <label for="name-{{ index }}"><span [ngClass]="{'labelfloat' : spinNameStatus == 1 }"  class="labelName">Name<span class="important">*</span></span>
-                                <input id="name-{{ index }}" type="text" formControlName="nameOfSpin" (focusout)="inputFocusEvent(0,item.get('nameOfSpin'),1)" (focus)="inputFocusEvent(1,item.get('nameOfSpin'),1)" /> 
-
-                                @if(item.get('nameOfSpin')?.errors){
-                                @if(item.get('nameOfSpin')?.invalid && item.get('nameOfSpin')?.hasError('required') &&
-                                (item.get('nameOfSpin')?.dirty || item.get('nameOfSpin')?.touched)){
-                                <div class="error">name is required</div>
-                                }
-                                @else if(item.get('nameOfSpin')?.hasError('minLength') &&
-                                !item.get('nameOfSpin')?.hasError('required')){
-                                <div class="error">{{item.get('nameOfSpin')?.errors?.['minLength']}}
-                                </div>
-                                }
-
-                                }
-
-
-
-                            </label>
-
-                        </div>
-
-
-                        <div class="inputBox position-relative mt-5">
-                            <label for="name-{{ index }}"><span [ngClass]="{'labelfloat' : sectonNumberStatus == 2 }" class="labelName">Number<span class="important">*</span></span>
-                                <input id="name-{{ index }}" type="number" formControlName="numberOfSectors" (focusout)="inputFocusEvent(0,item.get('numberOfSectors'),2)" (focus)="inputFocusEvent(1,item.get('numberOfSectors'),2)" />
-                                @if(item.get('numberOfSectors')?.invalid && item.get('numberOfSectors')?.hasError('required')&& (item.get('numberOfSectors')?.dirty ||
-                                item.get('numberOfSectors')?.touched)){
-                                <div class="error">number of Sector is required</div>
-                                } 
-                                @if(item.get('numberOfSectors')?.invalid && !item.get('numberOfSectors')?.hasError('required') && (item.get('numberOfSectors')?.dirty ||
-                                item.get('numberOfSectors')?.touched)){
-                                <div class="error">minimum three sectors are required</div>
-                                } 
-                            </label>
-                        </div>
-
-                    </div>
+                  <p class="mb-0 ms-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label>ID</mat-label>
+                      <input
+                        matInput
+                        placeholder="Enter unique ID"
+                        formControlName="id"
+                        (input)="onSectorIdChange()"
+                      />
+                      @if (
+                        item.get('id')?.invalid &&
+                        item.get('id')?.hasError('required') &&
+                        (item.get('id')?.dirty || item.get('id')?.touched)
+                      ) {
+                        <mat-error>ID is required</mat-error>
+                      }
+                      @if (item.get('id')?.hasError('duplicateId')) {
+                        <mat-error>ID must be unique</mat-error>
+                      }
+                    </mat-form-field>
+                  </p>
                 </div>
 
+                <div class="col-md-12 col-12 d-flex mt-2">
+                  <label class="ms-3 d-flex">
+                    Background Color<span class="important">*</span>
+                    <input type="color" formControlName="bgColor" class="ms-2" />
+                  </label>
 
-                <div class="mt-4 row mx-0" formArrayName="numberOfspinAdd">
-                    <div class="col-lg-6  gy-3 col-12" *ngFor="let item of sectorInputData.controls; index as index" [formGroupName]="index">
-                        <div class="customCard row mx-0 justify-content-center align-items-center">
-                            <div class="col-md-12 d-flex col-12">
-                                <p class="mb-0">
-                                    <mat-form-field appearance="outline">
-                                      <mat-label>Name </mat-label>
-                                      <input matInput placeholder="Enter sector name" formControlName="name" > 
-                                      @if(myForm.get('name')?.invalid && (myForm.get('name')?.dirty ||
-                                      myForm.get('name')?.touched)){
-                                      <!-- <div class="error">name is required</div> -->
-                                       } 
-                                    </mat-form-field>
-                                  </p>
-                         
-                                <p class="mb-0 ms-3">
-                                    <mat-form-field appearance="outline">
-                                      <mat-label>ID</mat-label>
-                                      <input matInput placeholder="Enter id" formControlName="id" > 
-                                      @if(myForm.get('id')?.invalid && (myForm.get('id')?.dirty ||
-                                      myForm.get('id')?.touched)){
-                                      <!-- <div class="error">ID is required</div> -->
-                                       } 
-                                    </mat-form-field>
-                                  </p>
-                            </div>
-
-                      
-                              <div class="col-md-12 col-12 d-flex mt-2">
-                                <label for="" class="ms-3 d-flex">Color<span class="important">*</span>
-                                    <input type="color" formControlName="bgColor" class="ms-2" />
-                                    @if(myForm.get('bgColor')?.invalid && (myForm.get('bgColor')?.dirty ||
-                                    myForm.get('bgColor')?.touched)){
-                                    }
-         
-         
-                                </label>
-         
-                                <label for="" class="ms-3 d-flex">Color<span class="important">*</span>
-                                    <input type="color" formControlName="textColor" class="ms-2" />
-                                    @if(myForm.get('textColor')?.invalid && (myForm.get('textColor')?.dirty ||
-                                    myForm.get('textColor')?.touched)){
-                                    }
-         
-         
-                                </label>
-                              </div>
-
-                        </div>
-                    </div>
+                  <label class="ms-3 d-flex">
+                    Text Color<span class="important">*</span>
+                    <input type="color" formControlName="textColor" class="ms-2" />
+                  </label>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                @if(sectorInputAdded){
-                    <input type="submit" class="theameOutlineButton mt-5" value="submit">
-                    
-                }@else{
-                    <button class="theameOutlineButton mt-5" type="button" (click)="addInputs()">add</button>
-                }
-
-
-
-
-
-            </form>
-
-        </div>
-
-
-
-
+          @if (sectorInputAdded) {
+            <input type="submit" class="theameOutlineButton mt-5" value="Submit" />
+          } @else {
+            <button class="theameOutlineButton mt-5" type="button" (click)="addInputs()">Add Sectors</button>
+          }
+        </form>
+      </div>
     </div>
+  </section>
 </div>
-
-
- 
