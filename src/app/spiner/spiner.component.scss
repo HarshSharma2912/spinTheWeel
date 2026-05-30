@@ -1,6 +1,8 @@
 #wheel {
   display: block;
   max-width: 100%;
+  will-change: transform, filter;
+  transform-origin: center center;
 }
 
 .wheel-wrapper {
@@ -72,6 +74,27 @@
   box-shadow: 0 0 40px rgba(99, 102, 241, 0.15);
 }
 
+.wheel-stage--celebrating {
+  box-shadow:
+    0 0 50px rgba(251, 191, 36, 0.22),
+    0 0 80px rgba(99, 102, 241, 0.12);
+  animation: stage-celebrate 2.2s ease-out;
+}
+
+@keyframes stage-celebrate {
+  0%,
+  100% {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.15);
+  }
+
+  35%,
+  65% {
+    box-shadow:
+      0 0 55px rgba(251, 191, 36, 0.28),
+      0 0 90px rgba(99, 102, 241, 0.15);
+  }
+}
+
 .wheel-frame {
   position: relative;
   width: min(100%, 380px);
@@ -93,6 +116,48 @@
   filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.35));
   z-index: 6;
   pointer-events: none;
+  transform-origin: 50% 20%;
+  will-change: transform;
+  transition: transform 0.08s ease-out;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f8fafc, #cbd5e1);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35);
+  }
+}
+
+.wheel-pointer--tick {
+  transform: translateX(-50%) rotate(-8deg) scale(0.96);
+}
+
+.wheel-pointer--bounce {
+  animation: pointer-bounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pointer-bounce {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  30% {
+    transform: translateX(-50%) translateY(6px) rotate(3deg);
+  }
+
+  55% {
+    transform: translateX(-50%) translateY(-3px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .wheel-container,
@@ -109,6 +174,7 @@
     0 0 0 6px rgba(255, 255, 255, 0.12),
     0 18px 45px rgba(15, 23, 42, 0.45),
     inset 0 0 30px rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.4s ease;
 
   canvas {
     width: 100%;
@@ -117,6 +183,44 @@
     aspect-ratio: 1;
     object-fit: contain;
   }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.12), transparent 50%);
+    mix-blend-mode: soft-light;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    box-shadow:
+      inset 0 12px 24px rgba(255, 255, 255, 0.08),
+      inset 0 -16px 28px rgba(15, 23, 42, 0.35);
+  }
+}
+
+.wheel-container--spinning {
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.14),
+    0 22px 50px rgba(15, 23, 42, 0.5),
+    inset 0 0 30px rgba(255, 255, 255, 0.06);
+}
+
+.wheel-container--fast {
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.16),
+    0 0 30px rgba(99, 102, 241, 0.25),
+    0 24px 55px rgba(15, 23, 42, 0.55),
+    inset 0 0 30px rgba(255, 255, 255, 0.08);
 }
 
 .wheel-hub {
@@ -138,6 +242,56 @@
     0 8px 24px rgba(99, 102, 241, 0.45),
     inset 0 2px 8px rgba(255, 255, 255, 0.35),
     inset 0 -4px 10px rgba(15, 23, 42, 0.2);
+  will-change: transform, box-shadow;
+  transition: box-shadow 0.3s ease;
+}
+
+.wheel-hub--spinning {
+  animation: hub-spin-pulse 0.8s ease-in-out infinite;
+}
+
+.wheel-hub--fast {
+  animation: hub-spin-pulse 0.35s ease-in-out infinite;
+  box-shadow:
+    0 0 20px rgba(99, 102, 241, 0.55),
+    0 8px 24px rgba(99, 102, 241, 0.45),
+    inset 0 2px 8px rgba(255, 255, 255, 0.35),
+    inset 0 -4px 10px rgba(15, 23, 42, 0.2);
+}
+
+.wheel-hub--celebrating {
+  animation: hub-celebrate 2.2s ease-out;
+}
+
+@keyframes hub-spin-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes hub-celebrate {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      0 8px 24px rgba(99, 102, 241, 0.45),
+      inset 0 2px 8px rgba(255, 255, 255, 0.35);
+  }
+
+  25%,
+  55%,
+  85% {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow:
+      0 0 28px rgba(251, 191, 36, 0.65),
+      0 10px 30px rgba(99, 102, 241, 0.5),
+      inset 0 2px 10px rgba(255, 255, 255, 0.45);
+  }
 }
 
 .wheel-hub__ring {
@@ -145,6 +299,34 @@
   inset: 6px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.wheel-hub__glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wheel-hub--spinning .wheel-hub__glow,
+.wheel-hub--fast .wheel-hub__glow {
+  opacity: 1;
+  animation: hub-glow 1s ease-in-out infinite;
+}
+
+@keyframes hub-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
 }
 
 .wheel-hub__label {
@@ -185,5 +367,21 @@
 
   .wheel-wrapper--embedded .wheel-frame {
     width: min(calc(100% - 0.5rem), 300px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-pointer--bounce,
+  .wheel-hub--spinning,
+  .wheel-hub--fast,
+  .wheel-hub--celebrating,
+  .wheel-stage--celebrating,
+  .wheel-hub--spinning .wheel-hub__glow,
+  .wheel-hub--fast .wheel-hub__glow {
+    animation: none;
+  }
+
+  #wheel {
+    filter: none !important;
   }
 }

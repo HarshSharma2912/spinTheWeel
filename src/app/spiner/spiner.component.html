@@ -61,13 +61,36 @@
 }
 
 @if (!wantToStopSpecificPosition || showControls) {
-  <div class="wheel-stage" [class.wheel-stage--active]="isSpinOn">
+  <div
+    class="wheel-stage"
+    [class.wheel-stage--active]="isSpinOn"
+    [class.wheel-stage--celebrating]="isCelebrating"
+  >
     <div class="wheel-frame">
-      <div class="wheel-pointer" aria-hidden="true"></div>
-      <div id="wheelOfFortune" class="wheel-container">
+      <div
+        class="wheel-pointer"
+        [class.wheel-pointer--tick]="pointerTick"
+        [class.wheel-pointer--bounce]="pointerBounce"
+        aria-hidden="true"
+      ></div>
+      <div
+        id="wheelOfFortune"
+        class="wheel-container"
+        [class.wheel-container--spinning]="angVel > 0"
+        [class.wheel-container--fast]="angVel > 8"
+      >
         <canvas #wheel id="wheel" width="500" height="500"></canvas>
-        <div #spin id="spin" class="wheel-hub" aria-hidden="true">
+        <div
+          #spin
+          id="spin"
+          class="wheel-hub"
+          [class.wheel-hub--spinning]="angVel > 0"
+          [class.wheel-hub--fast]="angVel > 8"
+          [class.wheel-hub--celebrating]="isCelebrating"
+          aria-hidden="true"
+        >
           <span class="wheel-hub__ring"></span>
+          <span class="wheel-hub__glow"></span>
           <span class="wheel-hub__label">SPIN</span>
         </div>
       </div>
